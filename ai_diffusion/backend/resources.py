@@ -214,6 +214,11 @@ class Arch(Enum):
         return self.is_edit or self.is_flux2 or self is Arch.qwen2
 
     @property
+    def supports_same_model_edit(self):  # can serve edit mode with the same model
+        # requires an edit adapter LoRA, see default_names for ResourceKind.lora
+        return self is Arch.moss
+
+    @property
     def is_sdxl_like(self):
         # illustrious technically uses sdxl architecture, but has a separate ecosystem
         return self in [Arch.sdxl, Arch.illu, Arch.illu_v]
@@ -811,6 +816,11 @@ search_paths: dict[str, list[str]] = {
     resource_id(ResourceKind.lora, Arch.flux, "turbo"): ["flux.1-turbo"],
     resource_id(ResourceKind.lora, Arch.flux_k, "turbo"): ["flux.1-turbo"],
     resource_id(ResourceKind.lora, Arch.anima, "turbo"): ["anima-turbo-lora"],
+    resource_id(ResourceKind.lora, Arch.moss, "edit"): [
+        "Moss-Image-Edit/adapter_model",
+        "moss-image-edit",
+        "moss_image_edit",
+    ],
     resource_id(ResourceKind.lora, Arch.sd15, ControlMode.face): ["ip-adapter-faceid-plusv2_sd15_lora", "ip-adapter-faceid-plus_sd15_lora"],
     resource_id(ResourceKind.lora, Arch.sdxl, ControlMode.face): ["ip-adapter-faceid-plusv2_sdxl_lora", "ip-adapter-faceid_sdxl_lora"],
     resource_id(ResourceKind.lora, Arch.flux, ControlMode.depth): ["flux1-depth"],
@@ -918,6 +928,7 @@ recommended_resource_ids = [
     ResourceId(ResourceKind.controlnet, Arch.flux, ControlMode.inpaint),
     ResourceId(ResourceKind.controlnet, Arch.flux, ControlMode.universal),
     ResourceId(ResourceKind.lora, Arch.flux, "turbo"),
+    ResourceId(ResourceKind.lora, Arch.moss, "edit"),
     ResourceId(ResourceKind.model_patch, Arch.zimage, ControlMode.universal),
     ResourceId(ResourceKind.model_patch, Arch.zimage, ControlMode.blur),
 ]

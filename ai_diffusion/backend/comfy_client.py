@@ -189,6 +189,7 @@ class ComfyClient(Client):
             translation=True,
             languages=await _list_languages(self),
             gguf="UnetLoaderGGUF" in nodes,
+            moss_edit="TextEncodeMOSSImageEdit" in nodes,
         )
 
         # Check for required and optional model resources
